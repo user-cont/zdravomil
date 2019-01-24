@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+
+  redis:
+    image: docker.io/library/redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    user: "123123"
+
+  flower:
+    image: mher/flower
+    container_name: flower
+    ports:
+     - "5555:5555"
+    depends_on:
+     - redis
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+    user: "123123"
+
+  zdravomil:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: docker.io/usercont/zdravomil
+    network_mode: "host"
+    environment:
+      REDIS_SERVICE_HOST: localhost
+      APP: zdravomil.tasks
+      WORKER_QUEUES: queue.zdravomil
+      DEPLOYMENT: 'dev'
+      GITHUB_API_KEY: ${GITHUB_API_KEY}
+
+    user: "123123"
+
+  redis-commander:
+    container_name: redis-commander
+    hostname: redis-commander
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    ports:
+    - 8081:8081
+    user: "123123"
+

@@ -1,0 +1,9 @@
+FROM docker.io/usercont/zdravomil
+
+WORKDIR /tmp/zdravomil/
+
+RUN pip3 install -r tests/requirements.txt --user --no-cache-dir
+
+RUN /bin/setup.sh
+
+CMD ["make","test"]

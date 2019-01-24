@@ -1,0 +1,14 @@
+{
+  "topic": "org.fedoraproject.prod.github.issue.comment",
+  "msg": {
+    "issue": {
+      "number": 2,
+      "pull_request": {
+        "url": "https://api.dummy.com/repos/container-images/rsyslog/pulls/2"
+      }
+    },
+    "repository": {
+      "full_name": "container-images/rsyslog"
+    }
+  }
+}

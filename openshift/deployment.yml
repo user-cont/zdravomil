@@ -1,0 +1,64 @@
+---
+  kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    labels:
+      service: bot-zdravomil
+    name: bot-zdravomil
+  spec:
+    template:
+      metadata:
+        labels:
+          name: bot-zdravomil
+      spec:
+        volumes:
+        - name: linter-logs
+          emptyDir: {}
+        containers:
+          - name: zdravomil
+            image: docker.io/usercont/zdravomil
+            volumeMounts:
+             - name: linter-logs
+               mountPath: /home/zdravomil/logs
+            env:
+              - name: WORKER_QUEUES
+                value: queue.zdravomil
+              - name:  APP
+                value: zdravomil.tasks
+              - name: REDIS_SERVICE_HOST
+                value: redis
+              - name: DEPLOYMENT
+                valueFrom:
+                  configMapKeyRef:
+                    name: common
+                    key: deployment
+              - name: SENTRY_DSN
+                valueFrom:
+                  secretKeyRef:
+                    name: common
+                    key: sentry_dsn
+            resources:
+              requests:
+                memory: "400Mi"
+                cpu: "200m"
+              limits:
+                memory: "800Mi"
+                cpu: "400m"
+          - name: cleaner
+            image: busybox
+            volumeMounts:
+             - name: linter-logs
+               mountPath: /logs
+            command: ["/bin/sh"]
+            args: ["-c", "while true; do sleep 1d; find /logs/* -mtime +3 -delete; done"]
+            resources:
+              requests:
+                memory: "64Mi"
+                cpu: "50m"
+              limits:
+                memory: "128Mi"
+                cpu: "100m"
+
+    replicas: 1
+    strategy:
+      type: Recreate
