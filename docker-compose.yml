@@ -25,12 +25,12 @@ services:
       context: .
       dockerfile: Dockerfile
     image: docker.io/usercont/zdravomil
-    network_mode: "host"
+    network_mode: host
     environment:
       REDIS_SERVICE_HOST: localhost
       APP: zdravomil.tasks
       WORKER_QUEUES: queue.zdravomil
-      DEPLOYMENT: 'dev'
+      DEPLOYMENT: dev
       GITHUB_API_KEY: ${GITHUB_API_KEY}
 
     user: "123123"

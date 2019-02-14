@@ -32,6 +32,11 @@
                   configMapKeyRef:
                     name: common
                     key: deployment
+              - name: GITHUB_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: zdravomil-api-keys
+                    key: github_api_key
               - name: SENTRY_DSN
                 valueFrom:
                   secretKeyRef:
