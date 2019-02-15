@@ -1,4 +1,4 @@
-FROM registry.fedoraproject.org/fedora:28
+FROM docker.io/usercont/frambo
 
 ENV NAME=zdravomil \
     RELEASE=1 \
