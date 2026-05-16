@@ -1,2 +1,2 @@
 flexmock
-pytest==3.4.2
+pytest==9.0.3
